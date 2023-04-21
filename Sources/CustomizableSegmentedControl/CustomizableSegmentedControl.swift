@@ -27,6 +27,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
     private let insets: EdgeInsets
     private let interSegmentSpacing: CGFloat
     private let contentStyle: CustomizableSegmentedControlContentStyle
+    private let animation: Animation
     private let selectionView: () -> SelectionView
     private let segmentContent: (Option, Bool) -> SegmentContent
 
@@ -53,6 +54,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
         insets: EdgeInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0),
         interSegmentSpacing: CGFloat = 0,
         contentStyle: CustomizableSegmentedControlContentStyle = .default,
+        animation: Animation = .default,
         selectionView: @escaping () -> SelectionView,
         @ViewBuilder segmentContent: @escaping (Option, Bool) -> SegmentContent
     ) {
@@ -61,6 +63,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
         self.insets = insets
         self.interSegmentSpacing = interSegmentSpacing
         self.contentStyle = contentStyle
+        self.animation = animation
         self.selectionView = selectionView
         self.segmentContent = segmentContent
         self.optionIsPressed = Dictionary(uniqueKeysWithValues: options.lazy.map { ($0.id, false) })
@@ -75,6 +78,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
                     content: segmentContent(option, optionIsPressed[option.id, default: false]),
                     selectionView: selectionView(),
                     isSelected: selection == option,
+                    animation: animation,
                     contentBlendMode: contentStyle.contentBlendMode,
                     firstLevelOverlayBlendMode: contentStyle.firstLevelOverlayBlendMode,
                     highestLevelOverlayBlendMode: contentStyle.highestLevelOverlayBlendMode,
@@ -105,6 +109,7 @@ extension CustomizableSegmentedControl {
         let content: Content
         let selectionView: SelectionView
         let isSelected: Bool
+        let animation: Animation
         let contentBlendMode: BlendMode?
         let firstLevelOverlayBlendMode: BlendMode?
         let highestLevelOverlayBlendMode: BlendMode?
@@ -138,7 +143,7 @@ extension CustomizableSegmentedControl {
                                 .matchedGeometryEffect(id: backgroundID, in: namespaceID)
                         }
                     }
-                    .animation(.default, value: isSelected)
+                    .animation(animation, value: isSelected)
             }
             .buttonStyle(SegmentButtonStyle(isPressed: $isPressed))
         }
