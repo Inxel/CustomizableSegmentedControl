@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = 'CustomizableSegmentedControl'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of CustomizableSegmentedControl.'
+  s.summary          = 'If you're bored with standard segmented control, this framework is for you! CustomizableSegmentedControl is a customizable segmented control written in SwiftUI 2.0.'
   s.homepage         = 'https://github.com/Inxel/CustomizableSegmentedControl'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Tyoma Zagosikn' => 'artyzago@gmail.com' }
