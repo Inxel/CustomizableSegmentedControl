@@ -44,6 +44,9 @@ Then, run the following command:
 $ pod install
 ```
 
+### Manual
+Just copy from `CustomizableSegmentedControl.swift` file and paste it to your project.
+
 # Usage
 
 Just setup `CustomizableSegmentedControl` view with parameters:
