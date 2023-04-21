@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B6BE07D29F2DEDE004E7299 /* CustomizableSegmentedControl in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6BE07C29F2DEDE004E7299 /* CustomizableSegmentedControl */; };
 		1BCA97A129F2795D00784B06 /* CustomizableSegmentedControlExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCA97A029F2795D00784B06 /* CustomizableSegmentedControlExampleApp.swift */; };
 		1BCA97A329F2795D00784B06 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCA97A229F2795D00784B06 /* ContentView.swift */; };
 		1BCA97A529F2795F00784B06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BCA97A429F2795F00784B06 /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B6BE07D29F2DEDE004E7299 /* CustomizableSegmentedControl in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,9 @@
 			dependencies = (
 			);
 			name = CustomizableSegmentedControlExample;
+			packageProductDependencies = (
+				1B6BE07C29F2DEDE004E7299 /* CustomizableSegmentedControl */,
+			);
 			productName = CustomizableSegmentedControlExample;
 			productReference = 1BCA979D29F2795D00784B06 /* CustomizableSegmentedControlExample.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +116,9 @@
 				Base,
 			);
 			mainGroup = 1BCA979429F2795D00784B06;
+			packageReferences = (
+				1B6BE07B29F2DEDE004E7299 /* XCRemoteSwiftPackageReference "CustomizableSegmentedControl" */,
+			);
 			productRefGroup = 1BCA979E29F2795D00784B06 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -339,6 +347,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1B6BE07B29F2DEDE004E7299 /* XCRemoteSwiftPackageReference "CustomizableSegmentedControl" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Inxel/CustomizableSegmentedControl";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1B6BE07C29F2DEDE004E7299 /* CustomizableSegmentedControl */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B6BE07B29F2DEDE004E7299 /* XCRemoteSwiftPackageReference "CustomizableSegmentedControl" */;
+			productName = CustomizableSegmentedControl;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1BCA979529F2795D00784B06 /* Project object */;
 }
