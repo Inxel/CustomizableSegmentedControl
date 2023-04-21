@@ -11,7 +11,7 @@ import SwiftUI
 struct CustomizableSegmentedControlExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CustomizableSegmentedControlExampleView()
         }
     }
 }
