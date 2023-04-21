@@ -34,7 +34,7 @@ platform :ios, '14.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'CustomizableSegmentedControl', '~> 1.0'
+    pod 'CustomizableSegmentedControl'
 end
 ```
 
