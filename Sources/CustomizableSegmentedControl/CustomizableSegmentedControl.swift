@@ -1,6 +1,5 @@
 import SwiftUI
 
-@available(iOS 14, *)
 /// Style of segment content
 public enum CustomizableSegmentedControlContentStyle {
     /// Default style. You configure color for all states of content.
@@ -19,7 +18,6 @@ public enum CustomizableSegmentedControlContentStyle {
 
 // MARK: - Segmented Control
 
-@available(iOS 14, *)
 public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, SelectionView: View, SegmentContent: View>: View {
 
     // MARK: - Properties
@@ -98,7 +96,6 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
 
 // MARK: - Segment
 
-@available(iOS 14, *)
 extension CustomizableSegmentedControl {
 
     fileprivate struct Segment<SelectionView: View, Content: View>: View {
@@ -152,10 +149,8 @@ extension CustomizableSegmentedControl {
 
 // MARK: - SegmentButtonStyle
 
-@available(iOS 14, *)
 extension CustomizableSegmentedControl.Segment {
 
-    @available(iOS 14, *)
     private struct SegmentButtonStyle: ButtonStyle {
 
         @Binding var isPressed: Bool
@@ -174,7 +169,6 @@ extension CustomizableSegmentedControl.Segment {
 
 // MARK: - CustomizableSegmentedControlContentStyle + Properties
 
-@available(iOS 14, *)
 private extension CustomizableSegmentedControlContentStyle {
 
     var contentBlendMode: BlendMode? {
@@ -208,7 +202,6 @@ private extension CustomizableSegmentedControlContentStyle {
 
 // MARK: - View + Extensions
 
-@available(iOS 14.0, *)
 private extension View {
 
     @ViewBuilder
