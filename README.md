@@ -9,6 +9,7 @@ If you're bored with standard segmented control, this framework is for you! `Cus
 
 - Supports any views
 - Works with blend modes
+- Works with right-to-left languages
 - Easy to use
 
 # Requirements
@@ -44,7 +45,7 @@ Then, run the following command:
 $ pod install
 ```
 
-### Manual
+### Manually
 Just copy from `CustomizableSegmentedControl.swift` file and paste it to your project.
 
 # Usage
@@ -81,7 +82,18 @@ CustomizableSegmentedControl(
 ```
 <img width="435" alt="image" src="https://user-images.githubusercontent.com/49271404/233736860-74a50584-7d15-4c76-9224-b7d0e8160565.png">
 
-Includes a small demo project showing how to use and customize it.
+Includes a small demo project showing how to use and customize it. Just clone the repo and build the Example project.
+
+# Contribution
+
+Feel free to submit Pull Requests or send me your feedback and suggestions!
+
+# Author
+
+Artyom Zagoskin
+- [GitHub](https://github.com/inxel)
+- [LinkedIn](https://www.linkedin.com/in/artyomzagoskin/)
+- [Other social networks](http://inxel.github.io/MyLinks/)
 
 # License
 
