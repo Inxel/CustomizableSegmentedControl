@@ -53,29 +53,29 @@ Just copy from `CustomizableSegmentedControl.swift` file and paste it to your pr
 Just setup `CustomizableSegmentedControl` view with parameters:
 ```swift
 CustomizableSegmentedControl(
-	selection: $selection,   					
-	options: [.one, .two, .three],        	
-	insets: .init(top: 4, leading: 4, bottom: 4, trailing: 4),          				
-	interSegmentSpacing: 2,
-	contentStyle: .withBlendMode(),
-	animation: .default,
-	selectionView: {
-	    Color.white
-	        .clipShape(RoundedRectangle(cornerRadius: 10))
-	},
-	segmentContent: { option, isPressed in
-	    HStack(spacing: 4) {
-	        Text(option.title)
-	            .font(.system(size: 16, weight: .semibold, design: .rounded))
+    selection: $selection,
+    options: [.one, .two, .three],
+    insets: .init(top: 4, leading: 4, bottom: 4, trailing: 4),
+    interSegmentSpacing: 2,
+    contentStyle: .withBlendMode(),
+    animation: .default,
+    selectionView: {
+        Color.white
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+    },
+    segmentContent: { option, isPressed in
+        HStack(spacing: 4) {
+            Text(option.title)
+                .font(.system(size: 16, weight: .semibold, design: .rounded))
 
-			option.imageName.map(Image.init(systemName:))
-		}
-    	.foregroundColor(.white.opacity(isPressed ? 0.7 : 1))
-	    .lineLimit(1)
-	    .padding(.vertical, 10)
-	    .padding(.horizontal, 12)
-    	.frame(maxWidth: .infinity)
-	}
+            option.imageName.map(Image.init(systemName:))
+        }
+        .foregroundColor(.white.opacity(isPressed ? 0.7 : 1))
+        .lineLimit(1)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .frame(maxWidth: .infinity)
+    }
 )
 .background(Color.blue)
 .clipShape(RoundedRectangle(cornerRadius: 14))
