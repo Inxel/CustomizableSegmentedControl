@@ -47,7 +47,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
     ///   - firstLevelOverlayBlendMode: Blend mode applies to first level overlay. Default is hue.
     ///   - highestLevelOverlayBlendMode: Blend mode applies to highest level overlay. Default is overlay..
     ///   - selectionView: Selected option background.
-    ///   - segmentContent: Content of segment. Returns related option and isPressed parameter.
+    ///   - segmentContent: Content of segment. Returns related option and isPressed parameters.
     public init(
         selection: Binding<Option>,
         options: [Option],
@@ -148,6 +148,44 @@ extension CustomizableSegmentedControl {
             .buttonStyle(SegmentButtonStyle(isPressed: $isPressed))
         }
 
+    }
+
+}
+
+// MARK: - CustomizableSegmentedControl + Custom Inits
+
+extension CustomizableSegmentedControl {
+
+    /// - parameters:
+    ///   - selection: Current selection.
+    ///   - options: All options in segmented control.
+    ///   - insets: Inner insets from container. Default is EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0).
+    ///   - interSegmentSpacing: Spacing between options. Default is 0.
+    ///   - contentBlendMode: Blend mode applies to content. Default is difference.
+    ///   - firstLevelOverlayBlendMode: Blend mode applies to first level overlay. Default is hue.
+    ///   - highestLevelOverlayBlendMode: Blend mode applies to highest level overlay. Default is overlay..
+    ///   - selectionView: Selected option background.
+    ///   - segmentContent: Content of segment. Returns related option and isPressed parameter.s
+    public init(
+        selection: Binding<Option>,
+        options: [Option],
+        insets: EdgeInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0),
+        interSegmentSpacing: CGFloat = 0,
+        contentStyle: CustomizableSegmentedControlContentStyle = .default,
+        animation: Animation = .default,
+        selectionView: SelectionView,
+        @ViewBuilder segmentContent: @escaping (Option, Bool) -> SegmentContent
+    ) {
+        self.init(
+            selection: selection,
+            options: options,
+            insets: insets,
+            interSegmentSpacing: interSegmentSpacing,
+            contentStyle: contentStyle,
+            animation: animation,
+            selectionView: { selectionView },
+            segmentContent: segmentContent
+        )
     }
 
 }

@@ -35,7 +35,7 @@ struct CustomizableSegmentedControlExampleView: View {
                     insets: insets,
                     interSegmentSpacing: interSegmentSpacing,
                     animation: animation.value,
-                    selectionView: { selectionView },
+                    selectionView: selectionView,
                     segmentContent: { option, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
                             .colorMultiply(selection == option ? Color.black : .white)
@@ -57,7 +57,7 @@ struct CustomizableSegmentedControlExampleView: View {
                     interSegmentSpacing: interSegmentSpacing,
                     contentStyle: .withBlendMode(),
                     animation: animation.value,
-                    selectionView: { selectionView },
+                    selectionView: selectionView,
                     segmentContent: { option, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
                     }
