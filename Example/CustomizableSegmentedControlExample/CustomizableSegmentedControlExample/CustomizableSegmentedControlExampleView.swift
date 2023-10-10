@@ -110,7 +110,7 @@ struct CustomizableSegmentedControlExampleView: View {
 
     private var animationPicker: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Sliding animations")
+            Text("Sliding animation")
                 .padding(.horizontal, 2)
 
             CustomizableSegmentedControl(
