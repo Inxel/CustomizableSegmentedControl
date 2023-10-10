@@ -42,6 +42,9 @@ struct CustomizableSegmentedControlExampleView: View {
                             .animation(.default, value: selection)
                     }
                 )
+                .segmentAccessibilityValue { index, totalSegmentsCount in
+                    "Custom accessibility value. Current segment is \(index) of \(totalSegmentsCount)"
+                }
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
