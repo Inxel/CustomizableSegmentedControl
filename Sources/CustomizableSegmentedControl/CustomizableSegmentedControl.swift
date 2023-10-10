@@ -1,33 +1,18 @@
 import SwiftUI
 
-/// Style of segment content
-public enum CustomizableSegmentedControlContentStyle {
-    /// Default style. You configure color for all states of content.
-    case `default`
-    /// Blend mode style. You configure colors, but some of them depends on background.
-    /// - parameters:
-    ///   - contentBlendMode: Blend mode applies to content. Default is difference.
-    ///   - firstLevelOverlayBlendMode: Blend mode applies to first level overlay. Default is hue.
-    ///   - highestLevelOverlayBlendMode: Blend mode applies to highest level overlay. Default is overlay..
-    case withBlendMode(
-        contentBlendMode: BlendMode = .difference,
-        firstLevelOverlayBlendMode: BlendMode = .hue,
-        highestLevelOverlayBlendMode: BlendMode = .overlay
-    )
-}
-
 // MARK: - Segmented Control
 
 public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, SelectionView: View, SegmentContent: View>: View {
 
     // MARK: - Properties
 
+    @Environment(\.segmentedControlInsets) var segmentedControlInsets
+    @Environment(\.segmentedControlInterSegmentSpacing) var interSegmentSpacing
+    @Environment(\.segmentedControlSlidingAnimation) var slidingAnimation
+    @Environment(\.segmentedControlContentStyle) var contentStyle
+
     @Binding private var selection: Option
     private let options: [Option]
-    private let insets: EdgeInsets
-    private let interSegmentSpacing: CGFloat
-    private let contentStyle: CustomizableSegmentedControlContentStyle
-    private let animation: Animation
     private let selectionView: () -> SelectionView
     private let segmentContent: (Option, Bool) -> SegmentContent
 
@@ -55,19 +40,11 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
     public init(
         selection: Binding<Option>,
         options: [Option],
-        insets: EdgeInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0),
-        interSegmentSpacing: CGFloat = 0,
-        contentStyle: CustomizableSegmentedControlContentStyle = .default,
-        animation: Animation = .default,
         selectionView: @escaping () -> SelectionView,
         @ViewBuilder segmentContent: @escaping (Option, Bool) -> SegmentContent
     ) {
         self._selection = selection
         self.options = options
-        self.insets = insets
-        self.interSegmentSpacing = interSegmentSpacing
-        self.contentStyle = contentStyle
-        self.animation = animation
         self.selectionView = selectionView
         self.segmentContent = segmentContent
         self.optionIsPressed = Dictionary(uniqueKeysWithValues: options.lazy.map { ($0.id, false) })
@@ -82,7 +59,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
                     content: segmentContent(option, optionIsPressed[option.id, default: false]),
                     selectionView: selectionView(),
                     isSelected: selection == option,
-                    animation: animation,
+                    animation: slidingAnimation,
                     contentBlendMode: contentStyle.contentBlendMode,
                     firstLevelOverlayBlendMode: contentStyle.firstLevelOverlayBlendMode,
                     highestLevelOverlayBlendMode: contentStyle.highestLevelOverlayBlendMode,
@@ -98,7 +75,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
                 .zIndex(selection == option ? 0 : 1)
             }
         }
-        .padding(insets)
+        .padding(segmentedControlInsets)
     }
 
 }
@@ -107,12 +84,12 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
 
 extension CustomizableSegmentedControl {
 
-    fileprivate struct Segment<SelectionView: View, Content: View>: View {
+    fileprivate struct Segment<SegmentSelectionView: View, Content: View>: View {
 
         // MARK: - Properties
 
         let content: Content
-        let selectionView: SelectionView
+        let selectionView: SegmentSelectionView
         let isSelected: Bool
         let animation: Animation
         let contentBlendMode: BlendMode?
@@ -181,20 +158,12 @@ extension CustomizableSegmentedControl {
     public init(
         selection: Binding<Option>,
         options: [Option],
-        insets: EdgeInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0),
-        interSegmentSpacing: CGFloat = 0,
-        contentStyle: CustomizableSegmentedControlContentStyle = .default,
-        animation: Animation = .default,
         selectionView: SelectionView,
         @ViewBuilder segmentContent: @escaping (Option, Bool) -> SegmentContent
     ) {
         self.init(
             selection: selection,
             options: options,
-            insets: insets,
-            interSegmentSpacing: interSegmentSpacing,
-            contentStyle: contentStyle,
-            animation: animation,
             selectionView: { selectionView },
             segmentContent: segmentContent
         )
@@ -230,8 +199,8 @@ private extension CustomizableSegmentedControlContentStyle {
         switch self {
             case .default:
                 return nil
-            case .withBlendMode(let blendMode, _, _):
-                return blendMode
+            case .blendMode(let mode, _, _):
+                return mode
         }
     }
 
@@ -239,8 +208,8 @@ private extension CustomizableSegmentedControlContentStyle {
         switch self {
             case .default:
                 return nil
-            case .withBlendMode(_, let blendMode, _):
-                return blendMode
+            case .blendMode(_, let mode, _):
+                return mode
         }
     }
 
@@ -248,8 +217,8 @@ private extension CustomizableSegmentedControlContentStyle {
         switch self {
             case .default:
                 return nil
-            case .withBlendMode(_, _, let blendMode):
-                return blendMode
+            case .blendMode(_, _, let mode):
+                return mode
         }
     }
 
@@ -263,7 +232,7 @@ public extension CustomizableSegmentedControl {
     ///
     /// - Parameters:
     ///     - completion: Takes index and total count. Returns neccessary string
-    func segmentAccessibilityValue(_ completion: @escaping (Int, Int) -> String) -> some View {
+    func segmentAccessibilityValue(_ completion: @escaping (Int, Int) -> String) -> Self {
         var copy = self
         copy.segmentAccessibilityValueCompletion = completion
         return copy
