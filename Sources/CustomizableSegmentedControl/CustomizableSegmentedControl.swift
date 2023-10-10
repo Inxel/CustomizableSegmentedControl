@@ -33,6 +33,10 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
 
     @State private var optionIsPressed: [Option.ID: Bool] = [:]
 
+    private var segmentAccessibilityValueCompletion: (Int, Int) -> String = { index, count in
+        "\(index) of \(count)"
+    }
+
     @Namespace private var namespaceID
     private let buttonBackgroundID: String = "buttonOverlayID"
 
@@ -73,7 +77,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
 
     public var body: some View {
         HStack(spacing: interSegmentSpacing) {
-            ForEach(options) { option in
+            ForEach(Array(zip(options.indices, options)), id: \.1.id) { index, option in
                 Segment(
                     content: segmentContent(option, optionIsPressed[option.id, default: false]),
                     selectionView: selectionView(),
@@ -88,6 +92,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
                     ),
                     backgroundID: buttonBackgroundID,
                     namespaceID: namespaceID,
+                    accessibiltyValue: segmentAccessibilityValueCompletion(index + 1, options.count),
                     action: { selection = option }
                 )
                 .zIndex(selection == option ? 0 : 1)
@@ -116,6 +121,7 @@ extension CustomizableSegmentedControl {
         @Binding var isPressed: Bool
         let backgroundID: String
         let namespaceID: Namespace.ID
+        let accessibiltyValue: String
         let action: () -> Void
 
         // MARK: - UI
@@ -128,12 +134,14 @@ extension CustomizableSegmentedControl {
                         if let firstLevelOverlayBlendMode {
                             content
                                 .blendMode(firstLevelOverlayBlendMode)
+                                .accessibilityHidden(true)
                         }
                     }
                     .overlay {
                         if let highestLevelOverlayBlendMode {
                             content
                                 .blendMode(highestLevelOverlayBlendMode)
+                                .accessibilityHidden(true)
                         }
                     }
                     .background {
@@ -146,6 +154,10 @@ extension CustomizableSegmentedControl {
                     .animation(animation, value: isSelected)
             }
             .buttonStyle(SegmentButtonStyle(isPressed: $isPressed))
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
+            .accessibilityRemoveTraits(isSelected ? [] : .isSelected)
+            .accessibilityValue(accessibiltyValue)
         }
 
     }
@@ -239,6 +251,22 @@ private extension CustomizableSegmentedControlContentStyle {
             case .withBlendMode(_, _, let blendMode):
                 return blendMode
         }
+    }
+
+}
+
+// MARK: - CustomizableSegmentedControl + Accessibility Extensions
+
+public extension CustomizableSegmentedControl {
+
+    /// Add accessibility value to every segment
+    ///
+    /// - Parameters:
+    ///     - completion: Takes index and total count. Returns neccessary string
+    func segmentAccessibilityValue(_ completion: @escaping (Int, Int) -> String) -> some View {
+        var copy = self
+        copy.segmentAccessibilityValueCompletion = completion
+        return copy
     }
 
 }
