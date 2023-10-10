@@ -19,7 +19,10 @@ struct CustomizableSegmentedControlExampleView: View {
     private let insets: EdgeInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)
     private let interSegmentSpacing: CGFloat = 2
 
-    @State private var animation: SegmentedControlAnimation = .default
+    @State private var animationSelection: SegmentedControlAnimation = .default
+    private let animationOptions: [SegmentedControlAnimation] = SegmentedControlAnimation.allCases
+
+    @State private var containerCornerRadius: CGFloat = 14
 
     var body: some View {
         VStack(alignment: .leading, spacing: 40) {
@@ -32,7 +35,7 @@ struct CustomizableSegmentedControlExampleView: View {
                 CustomizableSegmentedControl(
                     selection: $selection,
                     options: options,
-                    selectionView: selectionView,
+                    selectionView: selectionView(),
                     segmentContent: { option, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
                             .colorMultiply(selection == option ? Color.black : .white)
@@ -43,10 +46,10 @@ struct CustomizableSegmentedControlExampleView: View {
                     "Custom accessibility value. Current segment is \(index) of \(totalSegmentsCount)"
                 }
                 .insets(insets)
-                .segmentedControlSlidingAnimation(animation.value)
+                .segmentedControlSlidingAnimation(animationSelection.value)
                 .segmentedControl(interSegmentSpacing: interSegmentSpacing)
                 .background(Color.blue)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius))
             }
 
             VStack(alignment: .leading, spacing: 12) {
@@ -56,36 +59,39 @@ struct CustomizableSegmentedControlExampleView: View {
                 CustomizableSegmentedControl(
                     selection: $selection,
                     options: options,
-                    selectionView: selectionView,
+                    selectionView: selectionView(),
                     segmentContent: { option, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
                     }
                 )
                 .insets(insets)
                 .segmentedControlContentStyle(.blendMode())
-                .segmentedControlSlidingAnimation(animation.value)
+                .segmentedControlSlidingAnimation(animationSelection.value)
                 .segmentedControl(interSegmentSpacing: interSegmentSpacing)
                 .background(Color.blue)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius))
             }
 
-            Text("\(selection.title) option is selected")
-                .padding(.horizontal, 2)
-
             Spacer()
 
-            animationPicker
-                .padding(.horizontal, 2)
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Container corner radius: \(Int(containerCornerRadius))")
+                    .padding(.horizontal, 2)
 
-            Spacer()
+                Slider(value: $containerCornerRadius, in: 0...24, step: 1)
+                    .tint(.purple)
+
+                animationPicker
+                    .padding(.horizontal, 2)
+            }
         }
         .font(.system(size: 18, weight: .bold, design: .rounded))
         .padding()
     }
 
-    private var selectionView: some View {
-        Color.white
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+    private func selectionView(color: Color = .white) -> some View {
+        color
+            .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius - 4))
     }
 
     private func segmentView(title: String, imageName: String?, isPressed: Bool) -> some View {
@@ -104,42 +110,37 @@ struct CustomizableSegmentedControlExampleView: View {
 
     private var animationPicker: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("You can use any animation you want. Some of them:")
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
+            Text("Sliding animation")
+                .padding(.horizontal, 2)
 
-            Button {
-                animation = .default
-            } label: {
-                HStack(spacing: 12) {
-                    Radiobutton(isSelected: animation == .default)
-
-                    Text("Default")
+            CustomizableSegmentedControl(
+                selection: $animationSelection,
+                options: animationOptions,
+                selectionView: selectionView(color: .purple),
+                segmentContent: { option, isPressed in
+                    segmentView(title: option.title, imageName: nil, isPressed: isPressed)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-
-            Button {
-                animation = .spring
-            } label: {
-                HStack(spacing: 12) {
-                    Radiobutton(isSelected: animation == .spring)
-
-                    Text("Spring")
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
+            )
+            .insets(insets)
+            .segmentedControlContentStyle(.blendMode())
+            .segmentedControl(interSegmentSpacing: interSegmentSpacing)
+            .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius))
+            .overlay(
+                RoundedRectangle(cornerRadius: containerCornerRadius)
+                    .stroke(.purple)
+            )
         }
-        .foregroundColor(colorScheme == .dark ? .white : .black)
-        .font(.system(size: 14, weight: .semibold, design: .rounded))
     }
 
 }
 
-extension CustomizableSegmentedControlExampleView {
+// MARK: - Auxiliary Types
+
+private extension CustomizableSegmentedControlExampleView {
 
     // MARK: - Option
 
-    enum Option: String, Identifiable, Hashable {
+    enum Option: String, CaseIterable, Identifiable, Hashable {
         case first
         case second
         case third
@@ -158,9 +159,12 @@ extension CustomizableSegmentedControlExampleView {
 
     // MARK: - Animation
 
-    enum SegmentedControlAnimation {
+    enum SegmentedControlAnimation: String, CaseIterable, Identifiable {
         case `default`
         case spring
+
+        var id: String { rawValue }
+        var title: String { rawValue.capitalized }
 
         var value: Animation {
             switch self {
@@ -170,48 +174,6 @@ extension CustomizableSegmentedControlExampleView {
                     return .interpolatingSpring(stiffness: 180, damping: 15)
             }
         }
-    }
-
-}
-
-// MARK: - Radiobutton
-
-struct Radiobutton: View {
-
-    // MARK: - Properties
-
-    let isSelected: Bool
-
-    // MARK: - UI
-
-    var body: some View {
-        content
-            .animation(.linear(duration: 0.15), value: isSelected)
-    }
-
-    private var content: some View {
-        ZStack {
-            radiobuttonShape
-                .stroke(
-                    isSelected ? Color.blue : .gray,
-                    lineWidth: 1
-                )
-                .background(
-                    radiobuttonShape
-                        .fill(Color.clear)
-                )
-                .frame(width: 20, height: 20)
-
-            if isSelected {
-                radiobuttonShape
-                    .fill(Color.blue)
-                    .frame(width: 10, height: 10)
-            }
-        }
-    }
-
-    private var radiobuttonShape: some Shape {
-        Circle()
     }
 
 }
