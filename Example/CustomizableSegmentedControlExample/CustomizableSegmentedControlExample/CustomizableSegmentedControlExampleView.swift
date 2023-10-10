@@ -25,7 +25,7 @@ struct CustomizableSegmentedControlExampleView: View {
     @State private var containerCornerRadius: CGFloat = 14
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 40) {
             Spacer()
 
             VStack(alignment: .leading, spacing: 12) {
