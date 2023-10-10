@@ -42,7 +42,6 @@ struct CustomizableSegmentedControlExampleView: View {
                             .animation(.default, value: selection)
                     }
                 )
-                .segmentAccessibilityValue { _, _ in"Custom accessibility value." }
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
