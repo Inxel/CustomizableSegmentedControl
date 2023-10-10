@@ -232,7 +232,7 @@ public extension CustomizableSegmentedControl {
     ///
     /// - Parameters:
     ///     - completion: Takes index and total count. Returns neccessary string
-    func segmentAccessibilityValue(_ completion: @escaping (Int, Int) -> String) -> some View {
+    func segmentAccessibilityValue(_ completion: @escaping (Int, Int) -> String) -> Self {
         var copy = self
         copy.segmentAccessibilityValueCompletion = completion
         return copy
