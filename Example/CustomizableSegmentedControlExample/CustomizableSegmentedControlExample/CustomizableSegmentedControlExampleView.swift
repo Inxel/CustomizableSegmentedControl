@@ -43,7 +43,7 @@ struct CustomizableSegmentedControlExampleView: View {
                     "Custom accessibility value. Current segment is \(index) of \(totalSegmentsCount)"
                 }
                 .insets(insets)
-                .segmentedControlSlidingAnimation(animation)
+                .segmentedControlSlidingAnimation(animation.value)
                 .segmentedControl(interSegmentSpacing: interSegmentSpacing)
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
@@ -63,7 +63,7 @@ struct CustomizableSegmentedControlExampleView: View {
                 )
                 .insets(insets)
                 .segmentedControlContentStyle(.blendMode())
-                .segmentedControlSlidingAnimation(animation)
+                .segmentedControlSlidingAnimation(animation.value)
                 .segmentedControl(interSegmentSpacing: interSegmentSpacing)
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
