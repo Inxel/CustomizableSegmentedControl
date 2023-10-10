@@ -33,6 +33,10 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
 
     @State private var optionIsPressed: [Option.ID: Bool] = [:]
 
+    private var segmentAccessibilityValueCompletion: (Int, Int) -> String = { index, count in
+        "\(index) of \(count)"
+    }
+
     @Namespace private var namespaceID
     private let buttonBackgroundID: String = "buttonOverlayID"
 
@@ -47,7 +51,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
     ///   - firstLevelOverlayBlendMode: Blend mode applies to first level overlay. Default is hue.
     ///   - highestLevelOverlayBlendMode: Blend mode applies to highest level overlay. Default is overlay..
     ///   - selectionView: Selected option background.
-    ///   - segmentContent: Content of segment. Returns related option and isPressed parameter.
+    ///   - segmentContent: Content of segment. Returns related option and isPressed parameters.
     public init(
         selection: Binding<Option>,
         options: [Option],
@@ -73,7 +77,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
 
     public var body: some View {
         HStack(spacing: interSegmentSpacing) {
-            ForEach(options) { option in
+            ForEach(Array(zip(options.indices, options)), id: \.1.id) { index, option in
                 Segment(
                     content: segmentContent(option, optionIsPressed[option.id, default: false]),
                     selectionView: selectionView(),
@@ -88,6 +92,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
                     ),
                     backgroundID: buttonBackgroundID,
                     namespaceID: namespaceID,
+                    accessibiltyValue: segmentAccessibilityValueCompletion(index + 1, options.count),
                     action: { selection = option }
                 )
                 .zIndex(selection == option ? 0 : 1)
@@ -116,6 +121,7 @@ extension CustomizableSegmentedControl {
         @Binding var isPressed: Bool
         let backgroundID: String
         let namespaceID: Namespace.ID
+        let accessibiltyValue: String
         let action: () -> Void
 
         // MARK: - UI
@@ -128,12 +134,14 @@ extension CustomizableSegmentedControl {
                         if let firstLevelOverlayBlendMode {
                             content
                                 .blendMode(firstLevelOverlayBlendMode)
+                                .accessibilityHidden(true)
                         }
                     }
                     .overlay {
                         if let highestLevelOverlayBlendMode {
                             content
                                 .blendMode(highestLevelOverlayBlendMode)
+                                .accessibilityHidden(true)
                         }
                     }
                     .background {
@@ -146,8 +154,50 @@ extension CustomizableSegmentedControl {
                     .animation(animation, value: isSelected)
             }
             .buttonStyle(SegmentButtonStyle(isPressed: $isPressed))
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
+            .accessibilityRemoveTraits(isSelected ? [] : .isSelected)
+            .accessibilityValue(accessibiltyValue)
         }
 
+    }
+
+}
+
+// MARK: - CustomizableSegmentedControl + Custom Inits
+
+extension CustomizableSegmentedControl {
+
+    /// - parameters:
+    ///   - selection: Current selection.
+    ///   - options: All options in segmented control.
+    ///   - insets: Inner insets from container. Default is EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0).
+    ///   - interSegmentSpacing: Spacing between options. Default is 0.
+    ///   - contentBlendMode: Blend mode applies to content. Default is difference.
+    ///   - firstLevelOverlayBlendMode: Blend mode applies to first level overlay. Default is hue.
+    ///   - highestLevelOverlayBlendMode: Blend mode applies to highest level overlay. Default is overlay..
+    ///   - selectionView: Selected option background.
+    ///   - segmentContent: Content of segment. Returns related option and isPressed parameter.s
+    public init(
+        selection: Binding<Option>,
+        options: [Option],
+        insets: EdgeInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0),
+        interSegmentSpacing: CGFloat = 0,
+        contentStyle: CustomizableSegmentedControlContentStyle = .default,
+        animation: Animation = .default,
+        selectionView: SelectionView,
+        @ViewBuilder segmentContent: @escaping (Option, Bool) -> SegmentContent
+    ) {
+        self.init(
+            selection: selection,
+            options: options,
+            insets: insets,
+            interSegmentSpacing: interSegmentSpacing,
+            contentStyle: contentStyle,
+            animation: animation,
+            selectionView: { selectionView },
+            segmentContent: segmentContent
+        )
     }
 
 }
@@ -201,6 +251,18 @@ private extension CustomizableSegmentedControlContentStyle {
             case .withBlendMode(_, _, let blendMode):
                 return blendMode
         }
+    }
+
+}
+
+// MARK: - CustomizableSegmentedControl + Accessibility Extensions
+
+public extension CustomizableSegmentedControl {
+
+    func segmentAccessibilityValue(_ completion: @escaping (Int, Int) -> String) -> some View {
+        var copy = self
+        copy.segmentAccessibilityValueCompletion = completion
+        return copy
     }
 
 }
