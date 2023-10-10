@@ -2,7 +2,7 @@
 
 If you're bored with standard segmented control, this framework is for you! `CustomizableSegmentedControl` is a customizable segmented control written in SwiftUI 2.0.
 
-<img width="430" src="https://user-images.githubusercontent.com/49271404/233738945-40366273-ff28-4762-8ab4-691f5238c603.gif">
+<img width="430" src="https://github.com/Inxel/CustomizableSegmentedControl/assets/49271404/594969f0-c519-4e67-95a4-b417755ab329">
 
 
 # Features
@@ -55,10 +55,6 @@ Just setup `CustomizableSegmentedControl` view with parameters:
 CustomizableSegmentedControl(
     selection: $selection,
     options: [.one, .two, .three],
-    insets: .init(top: 4, leading: 4, bottom: 4, trailing: 4),
-    interSegmentSpacing: 2,
-    contentStyle: .withBlendMode(),
-    animation: .default,
     selectionView: {
         Color.white
             .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -77,6 +73,10 @@ CustomizableSegmentedControl(
         .frame(maxWidth: .infinity)
     }
 )
+.insets(.all, 4)
+.segmentedControlContentStyle(.blendMode())
+.segmentedControl(interSegmentSpacing: 2)
+.segmentedControlSlidingAnimation(.bouncy)
 .background(Color.blue)
 .clipShape(RoundedRectangle(cornerRadius: 14))
 ```
