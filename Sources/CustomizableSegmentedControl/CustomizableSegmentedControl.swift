@@ -259,6 +259,10 @@ private extension CustomizableSegmentedControlContentStyle {
 
 public extension CustomizableSegmentedControl {
 
+    /// Add accessibility value to every segment
+    ///
+    /// - Parameters:
+    ///     - completion: Takes index and total count. Returns neccessary string
     func segmentAccessibilityValue(_ completion: @escaping (Int, Int) -> String) -> some View {
         var copy = self
         copy.segmentAccessibilityValueCompletion = completion
