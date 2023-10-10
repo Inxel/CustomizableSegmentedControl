@@ -32,9 +32,6 @@ struct CustomizableSegmentedControlExampleView: View {
                 CustomizableSegmentedControl(
                     selection: $selection,
                     options: options,
-                    insets: insets,
-                    interSegmentSpacing: interSegmentSpacing,
-                    animation: animation.value,
                     selectionView: selectionView,
                     segmentContent: { option, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
@@ -45,6 +42,9 @@ struct CustomizableSegmentedControlExampleView: View {
                 .segmentAccessibilityValue { index, totalSegmentsCount in
                     "Custom accessibility value. Current segment is \(index) of \(totalSegmentsCount)"
                 }
+                .insets(insets)
+                .segmentedControlSlidingAnimation(animation)
+                .segmentedControl(interSegmentSpacing: interSegmentSpacing)
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
@@ -56,15 +56,15 @@ struct CustomizableSegmentedControlExampleView: View {
                 CustomizableSegmentedControl(
                     selection: $selection,
                     options: options,
-                    insets: insets,
-                    interSegmentSpacing: interSegmentSpacing,
-                    contentStyle: .withBlendMode(),
-                    animation: animation.value,
                     selectionView: selectionView,
                     segmentContent: { option, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
                     }
                 )
+                .insets(insets)
+                .segmentedControlContentStyle(.blendMode())
+                .segmentedControlSlidingAnimation(animation)
+                .segmentedControl(interSegmentSpacing: interSegmentSpacing)
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
