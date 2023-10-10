@@ -35,9 +35,6 @@ struct CustomizableSegmentedControlExampleView: View {
                 CustomizableSegmentedControl(
                     selection: $selection,
                     options: options,
-                    insets: insets,
-                    interSegmentSpacing: interSegmentSpacing,
-                    animation: animationSelection.value,
                     selectionView: selectionView(),
                     segmentContent: { option, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
@@ -48,6 +45,9 @@ struct CustomizableSegmentedControlExampleView: View {
                 .segmentAccessibilityValue { index, totalSegmentsCount in
                     "Custom accessibility value. Current segment is \(index) of \(totalSegmentsCount)"
                 }
+                .insets(insets)
+                .segmentedControlSlidingAnimation(animationSelection.value)
+                .segmentedControl(interSegmentSpacing: interSegmentSpacing)
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius))
             }
@@ -59,15 +59,15 @@ struct CustomizableSegmentedControlExampleView: View {
                 CustomizableSegmentedControl(
                     selection: $selection,
                     options: options,
-                    insets: insets,
-                    interSegmentSpacing: interSegmentSpacing,
-                    contentStyle: .withBlendMode(),
-                    animation: animationSelection.value,
                     selectionView: selectionView(),
                     segmentContent: { option, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
                     }
                 )
+                .insets(insets)
+                .segmentedControlContentStyle(.blendMode())
+                .segmentedControlSlidingAnimation(animationSelection.value)
+                .segmentedControl(interSegmentSpacing: interSegmentSpacing)
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius))
             }
@@ -116,14 +116,14 @@ struct CustomizableSegmentedControlExampleView: View {
             CustomizableSegmentedControl(
                 selection: $animationSelection,
                 options: animationOptions,
-                insets: insets,
-                interSegmentSpacing: interSegmentSpacing,
-                contentStyle: .withBlendMode(),
                 selectionView: selectionView(color: .purple),
                 segmentContent: { option, isPressed in
                     segmentView(title: option.title, imageName: nil, isPressed: isPressed)
                 }
             )
+            .insets(insets)
+            .segmentedControlContentStyle(.blendMode())
+            .segmentedControl(interSegmentSpacing: interSegmentSpacing)
             .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius))
             .overlay(
                 RoundedRectangle(cornerRadius: containerCornerRadius)
