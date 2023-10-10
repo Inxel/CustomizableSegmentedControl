@@ -84,6 +84,11 @@ CustomizableSegmentedControl(
 
 Includes a small demo project showing how to use and customize it. Just clone the repo and build the Example project.
 
+# Accessibility
+
+Every segment of control supports voiceover. By default, there is a text like "Selected, first option, one of three, button".
+You can change accessibility value (in example it's "one of three") with CustomizableSegmentedControl extension `segmentAccessibilityValue` which contains completion with index of current segment and total number of options.
+
 # Contribution
 
 Feel free to submit Pull Requests or send me your feedback and suggestions!
