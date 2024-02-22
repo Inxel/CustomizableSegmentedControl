@@ -14,7 +14,8 @@ If you're bored with standard segmented control, this framework is for you! `Cus
 
 # Requirements
 
-- iOS 14.0+
+- iOS 15.0+
+- macOS 12.0+
 - Swift 5+
 
 # Installation
