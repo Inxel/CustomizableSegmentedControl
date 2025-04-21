@@ -36,7 +36,7 @@ struct CustomizableSegmentedControlExampleView: View {
                     selection: $selection,
                     options: options,
                     selectionView: selectionView(),
-                    segmentContent: { option, isPressed in
+                    segmentContent: { option, _, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
                             .colorMultiply(selection == option ? Color.black : .white)
                             .animation(.default, value: selection)
@@ -60,7 +60,7 @@ struct CustomizableSegmentedControlExampleView: View {
                     selection: $selection,
                     options: options,
                     selectionView: selectionView(),
-                    segmentContent: { option, isPressed in
+                    segmentContent: { option, _, isPressed in
                         segmentView(title: option.title, imageName: option.imageName, isPressed: isPressed)
                     }
                 )
@@ -117,7 +117,7 @@ struct CustomizableSegmentedControlExampleView: View {
                 selection: $animationSelection,
                 options: animationOptions,
                 selectionView: selectionView(color: .purple),
-                segmentContent: { option, isPressed in
+                segmentContent: { option, _, isPressed in
                     segmentView(title: option.title, imageName: nil, isPressed: isPressed)
                 }
             )
@@ -176,4 +176,9 @@ private extension CustomizableSegmentedControlExampleView {
         }
     }
 
+}
+
+@available(iOS 17.0, *)
+#Preview {
+    CustomizableSegmentedControlExampleView()
 }

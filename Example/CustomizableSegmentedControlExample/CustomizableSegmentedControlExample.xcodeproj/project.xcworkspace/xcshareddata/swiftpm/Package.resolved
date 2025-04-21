@@ -1,0 +1,15 @@
+{
+  "originHash" : "46bd9c1862ab23109f9438f0f314fe65654e7f0547cede8c5d0f96c7245d0348",
+  "pins" : [
+    {
+      "identity" : "customizablesegmentedcontrol",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Inxel/CustomizableSegmentedControl",
+      "state" : {
+        "revision" : "484a358c1b9dcb7fe5fe14db6a6a709125257ed4",
+        "version" : "1.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}

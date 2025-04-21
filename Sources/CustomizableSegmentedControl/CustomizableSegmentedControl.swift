@@ -14,7 +14,7 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
     @Binding private var selection: Option
     private let options: [Option]
     private let selectionView: () -> SelectionView
-    private let segmentContent: (Option, Bool) -> SegmentContent
+    private let segmentContent: (_ option: Option, _ isSelected: Bool, _ isPressed: Bool) -> SegmentContent
 
     @State private var optionIsPressed: [Option.ID: Bool] = [:]
 
@@ -41,13 +41,12 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
         selection: Binding<Option>,
         options: [Option],
         selectionView: @escaping () -> SelectionView,
-        @ViewBuilder segmentContent: @escaping (Option, Bool) -> SegmentContent
+        @ViewBuilder segmentContent: @escaping (_ option: Option, _ isSelected: Bool, _ isPressed: Bool) -> SegmentContent
     ) {
         self._selection = selection
         self.options = options
         self.selectionView = selectionView
         self.segmentContent = segmentContent
-        self.optionIsPressed = Dictionary(uniqueKeysWithValues: options.lazy.map { ($0.id, false) })
     }
 
     // MARK: - UI
@@ -56,17 +55,14 @@ public struct CustomizableSegmentedControl<Option: Hashable & Identifiable, Sele
         HStack(spacing: interSegmentSpacing) {
             ForEach(Array(zip(options.indices, options)), id: \.1.id) { index, option in
                 Segment(
-                    content: segmentContent(option, optionIsPressed[option.id, default: false]),
+                    content: segmentContent(option, option.id == selection.id, optionIsPressed[option.id, default: false]),
                     selectionView: selectionView(),
                     isSelected: selection == option,
                     animation: slidingAnimation,
                     contentBlendMode: contentStyle.contentBlendMode,
                     firstLevelOverlayBlendMode: contentStyle.firstLevelOverlayBlendMode,
                     highestLevelOverlayBlendMode: contentStyle.highestLevelOverlayBlendMode,
-                    isPressed: .init(
-                        get: { optionIsPressed[option.id, default: false] },
-                        set: { optionIsPressed[option.id] = $0 }
-                    ),
+                    isPressed: $optionIsPressed[option.id],
                     backgroundID: buttonBackgroundID,
                     namespaceID: namespaceID,
                     accessibiltyValue: segmentAccessibilityValueCompletion(index + 1, options.count),
@@ -95,7 +91,7 @@ extension CustomizableSegmentedControl {
         let contentBlendMode: BlendMode?
         let firstLevelOverlayBlendMode: BlendMode?
         let highestLevelOverlayBlendMode: BlendMode?
-        @Binding var isPressed: Bool
+        @Binding var isPressed: Bool?
         let backgroundID: String
         let namespaceID: Namespace.ID
         let accessibiltyValue: String
@@ -159,7 +155,7 @@ extension CustomizableSegmentedControl {
         selection: Binding<Option>,
         options: [Option],
         selectionView: SelectionView,
-        @ViewBuilder segmentContent: @escaping (Option, Bool) -> SegmentContent
+        @ViewBuilder segmentContent: @escaping (_ option: Option, _ isSelected: Bool, _ isPressed: Bool) -> SegmentContent
     ) {
         self.init(
             selection: selection,
@@ -177,7 +173,7 @@ extension CustomizableSegmentedControl.Segment {
 
     private struct SegmentButtonStyle: ButtonStyle {
 
-        @Binding var isPressed: Bool
+        @Binding var isPressed: Bool?
 
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
