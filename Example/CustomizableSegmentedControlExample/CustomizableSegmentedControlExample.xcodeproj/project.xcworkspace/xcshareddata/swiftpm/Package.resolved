@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Inxel/CustomizableSegmentedControl",
       "state" : {
-        "revision" : "484a358c1b9dcb7fe5fe14db6a6a709125257ed4",
-        "version" : "1.1.0"
+        "revision" : "b3ee377a0a2026c562159f09f7416d7abd449366",
+        "version" : "1.2.1"
       }
     }
   ],

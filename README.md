@@ -59,10 +59,10 @@ CustomizableSegmentedControl(
         Color.white
             .clipShape(RoundedRectangle(cornerRadius: 10))
     },
-    segmentContent: { option, isPressed in
+    segmentContent: { option, isSelected, isPressed in
         HStack(spacing: 4) {
             Text(option.title)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                .font(.system(size: 16, weight: isSelected ? .bold : .semibold, design: .rounded))
 
             option.imageName.map(Image.init(systemName:))
         }
