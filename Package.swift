@@ -9,11 +9,13 @@ let package = Package(
     products: [
         .library(
             name: "CustomizableSegmentedControl",
-            targets: ["CustomizableSegmentedControl"]),
+            targets: ["CustomizableSegmentedControl"]
+        ),
     ],
     targets: [
         .target(
             name: "CustomizableSegmentedControl",
-            dependencies: [])
+            dependencies: []
+        )
     ]
 )
